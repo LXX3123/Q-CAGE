@@ -1,0 +1,60 @@
+seed: 7
+
+model:
+  vlm:
+    backend: mock
+    model_id: mock-qwen
+    selected_layers: [18, 24, 30]
+    freeze: true
+    use_cache: true
+  generator:
+    backend: mock
+    model_id: mock-flux
+    freeze: true
+    dit_hidden_dim: 64
+  adapter:
+    vlm_hidden_dim: 32
+    adapter_dim: 16
+    dit_hidden_dim: 64
+    selected_layers: [18, 24, 30]
+    source_names: ["query", "history_image", "answer_text"]
+    num_queries: 8
+    num_heads: 4
+    cross_attention_layers: 1
+    dropout: 0.0
+    bottleneck: query
+
+data:
+  train_jsonl: data/mock/train.jsonl
+  val_jsonl: data/mock/val.jsonl
+  image_root: .
+  use_cached_features: true
+  num_workers: 0
+
+training:
+  output_dir: checkpoints/mock_tiny
+  epochs: 1
+  max_steps: 3
+  batch_size_per_gpu: 2
+  gradient_accumulation_steps: 1
+  learning_rate: 1.0e-3
+  weight_decay: 0.0
+  max_grad_norm: 1.0
+  precision: fp32
+  log_every: 1
+  save_every: 2
+  resume_from: null
+
+inference:
+  checkpoint: checkpoints/mock_tiny/latest.pt
+  input_jsonl: data/mock/val.jsonl
+  output_dir: outputs/mock_inference
+  num_steps: 2
+  guidance_scale: 1.0
+
+benchmark:
+  input_jsonl: data/mock/val.jsonl
+  output_dir: outputs/mock_opening
+  pairwise_export: outputs/mock_opening/intjudge_pairs.jsonl
+  candidate_name: qcage
+

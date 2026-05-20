@@ -1,0 +1,9 @@
+_base_: qcage_base.yaml
+
+inference:
+  checkpoint: checkpoints/qcage_a100_bf16/latest.pt
+  input_jsonl: data/infer_trajectories.jsonl
+  output_dir: outputs/inference
+  num_steps: 30
+  guidance_scale: 3.5
+

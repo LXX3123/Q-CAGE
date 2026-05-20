@@ -1,0 +1,62 @@
+seed: 1234
+
+model:
+  vlm:
+    backend: qwen
+    model_id: Qwen/Qwen3-VL-4B-Instruct
+    selected_layers: [18, 24, 30]
+    freeze: true
+    use_cache: true
+    trust_remote_code: true
+    device_map: null
+    attn_implementation: null
+    generate_answer_if_missing: true
+    max_new_tokens: 128
+  generator:
+    backend: mock
+    model_id: FLUX.2-klein-4B
+    freeze: true
+    dit_hidden_dim: 4096
+  adapter:
+    vlm_hidden_dim: 2560
+    adapter_dim: 1024
+    dit_hidden_dim: 4096
+    selected_layers: [18, 24, 30]
+    source_names: ["query", "history_image", "answer_text"]
+    num_queries: 96
+    num_heads: 16
+    cross_attention_layers: 2
+    dropout: 0.0
+    bottleneck: query
+
+data:
+  train_jsonl: data/train.jsonl
+  val_jsonl: data/val.jsonl
+  image_root: .
+  use_cached_features: true
+  num_workers: 4
+
+training:
+  output_dir: checkpoints/qcage_base
+  epochs: 1
+  max_steps: 1000
+  batch_size_per_gpu: 1
+  gradient_accumulation_steps: 8
+  learning_rate: 1.0e-4
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  precision: bf16
+  log_every: 10
+  save_every: 500
+  resume_from: null
+
+inference:
+  checkpoint: checkpoints/qcage_base/latest.pt
+  output_dir: outputs/inference
+  num_steps: 30
+  guidance_scale: 3.5
+
+benchmark:
+  input_jsonl: data/opening_eval.jsonl
+  output_dir: outputs/opening
+  pairwise_export: outputs/opening/intjudge_pairs.jsonl

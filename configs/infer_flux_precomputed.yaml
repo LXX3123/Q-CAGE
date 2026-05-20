@@ -1,0 +1,9 @@
+_base_: train_flux_precomputed_a100.yaml
+
+inference:
+  checkpoint: checkpoints/qcage_flux_precomputed/latest.pt
+  input_jsonl: data/infer_precomputed_flux.jsonl
+  output_dir: outputs/flux_precomputed_inference
+  num_steps: 30
+  guidance_scale: 3.5
+

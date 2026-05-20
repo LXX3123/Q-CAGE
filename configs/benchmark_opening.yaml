@@ -1,0 +1,9 @@
+_base_: qcage_base.yaml
+
+benchmark:
+  input_jsonl: data/opening_eval.jsonl
+  output_dir: outputs/opening_qcage
+  pairwise_export: outputs/opening_qcage/intjudge_pairs.jsonl
+  candidate_name: qcage
+  opening_model_name: Q-CAGE
+  official_model_output_dir: outputs/opening_qcage/Q-CAGE_output

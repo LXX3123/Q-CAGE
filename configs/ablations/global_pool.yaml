@@ -1,0 +1,5 @@
+_base_: ../qcage_base.yaml
+model:
+  adapter:
+    bottleneck: mean_pool
+

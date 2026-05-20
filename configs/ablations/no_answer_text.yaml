@@ -1,0 +1,5 @@
+_base_: ../qcage_base.yaml
+model:
+  adapter:
+    source_names: ["query", "history_image"]
+
